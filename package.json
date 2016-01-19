@@ -1,40 +1,45 @@
 {
-    "name"        : "gold-dice",
-    "description" : "the gold standard for provably fair dice",
-    "license"     : "Apache-2.0",
-    "homepage"    : "https://github.com/daxxog/gold-dice",
-    "main"        : "gold-dice.min.js",
-    "version"     : "0.0.1",
-    "engines": {
-        "node" : ">=0.10.33"
-    },
-    "maintainers": [{
-        "name"  : "David Volm",
-        "email" : "david@volminator.com",
-        "web"   : "http://daxxog.com/"
-    }],
-    "repository": {
-        "type" : "git",
-        "url"  : "https://github.com/daxxog/gold-dice.git"
-    },
-    "devDependencies": {
-        "bitfactory": "*",
-        "stoptime": "*",
-        "uglify-js": "*",
-        "vows": "*"
-    },
-    "scripts": {
-        "build": "node make.js; cat .gitignore | grep -v gold-dice.min.js > .npmignore",
-        "test": "vows test/*",
-        "start": "node cli.js",
-        "prepublish": "npm run build"
-    },
-    "files": [
-        "cli.min.js",
-        "gold-dice.min.js",
-        "bin/gold-dice"
-    ],
-    "bin": {
-        "gold-dice" : "bin/gold-dice"
+  "name": "gold-dice",
+  "description": "the gold standard for provably fair dice",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/daxxog/gold-dice",
+  "main": "gold-dice.min.js",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=0.10.33"
+  },
+  "maintainers": [
+    {
+      "name": "David Volm",
+      "email": "david@volminator.com",
+      "web": "http://daxxog.com/"
     }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daxxog/gold-dice.git"
+  },
+  "devDependencies": {
+    "bitfactory": "*",
+    "stoptime": "*",
+    "uglify-js": "*",
+    "vows": "*"
+  },
+  "scripts": {
+    "build": "node make.js; cat .gitignore | grep -v gold-dice.min.js > .npmignore",
+    "test": "vows test/*",
+    "start": "node cli.js",
+    "prepublish": "npm run build"
+  },
+  "files": [
+    "cli.min.js",
+    "gold-dice.min.js",
+    "bin/gold-dice"
+  ],
+  "bin": {
+    "gold-dice": "bin/gold-dice"
+  },
+  "dependencies": {
+    "bitcore-lib": "^0.13.11"
+  }
 }
