@@ -1,0 +1,7 @@
+.c9revisions/
+node_modules/
+npm-debug.log
+.DS_Store
+._.DS_Store
+cli.min.js
+gold-dice.min.js
