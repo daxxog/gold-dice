@@ -13,7 +13,8 @@ npm install --save gold-dice
 Examples
 -------
 ```bash
-var dice = new GoldDice();
+var GoldDice = require('gold-dice'),
+    dice = new GoldDice();
 
 //two sides, one roll
 console.log(dice.roll(2));
