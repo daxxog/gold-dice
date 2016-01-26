@@ -1,6 +1,6 @@
 /* GoldDice
  * the gold standard for provably fair dice
- * (c) 2015 David (daXXog) Volm ><> + + + <><
+ * (c) 2016 David (daXXog) Volm ><> + + + <><
  * Released under Apache License, Version 2.0:
  * http://www.apache.org/licenses/LICENSE-2.0.html  
  */
@@ -21,70 +21,118 @@
   }
 }(this, function() {
     var GoldDice,
+        Big = require('big.js'),
         Crypto = require('bitcore-lib').crypto;
     
     GoldDice = function(constructor) {
-        if(constructor) { //todo add constructor / serialization
+        var that = this;
+        
+        if(constructor) {
+            if(typeof constructor === 'string') {
+                constructor = JSON.parse(constructor);
+                constructor.server = new Buffer(constructor.server.data);
+                constructor.client = new Buffer(constructor.client.data);
+            }
+            
+            ['server', 'client', 'nonce'].forEach(function(v) {
+                that[v] = constructor[v];
+            });
         }
         
         if(!(Buffer.isBuffer(this.server) && (this.server.length === 64))) {
             this.server = Crypto.Hash.sha512(new Buffer(Math.random().toString(), 'utf8'));
         }
         
-        if(!(Buffer.isBuffer(this.client) && (this.server.length === 32))) {
+        if(!(Buffer.isBuffer(this.client) && (this.client.length === 32))) {
             this.client = Crypto.Hash.sha256(new Buffer(Math.random().toString(), 'utf8'));
         }
         
         if(typeof this.nonce !== 'number') {
             this.nonce = 0;
         }
+        
+        if(this.nonce < 0) {
+            this.nonce = 0;
+        }
+        
+        if(this.nonce.toString().indexOf('.') !== -1) {
+            this.nonce = 0;
+        }
     };
     
-    GoldDice.kalc = function(k, digits) {
-        return k.toString(10).split('').reverse().splice(0, digits).join('');
+    //- Constants
+    Big.DP = 10;
+    Big.RM = 1;
+    GoldDice.MAX_VAL = new Big(0xffffffffff); //1099511627775
+    
+    //- Static Functions
+    GoldDice.splice = function(k, digits) {
+        return k.split('').reverse().splice(0, digits).join('');
     };
     
-    GoldDice.k = function(s, o) {
-        return parseInt(s[0 + o] + s[1 + o] + s[2 + o] + s[3 + o] + s[4 + o], 16);
+    GoldDice.k = function(s) {
+        var k = (new Big(parseInt(s[0] + s[1] + s[2] + s[3] + s[4] + s[5] + s[6] + s[7] + s[8] + s[9], 16)))
+            .div(GoldDice.MAX_VAL)
+            .toString(),
+            kl;
+        
+        if(k === '1') {
+            k = '0000000001';
+        } else {
+            k = k.split('.')[1];
+        }
+        
+        if(k.length < 10) {
+            kl = k.length;
+            
+            for(var i = 0; i < (10 - kl); i++) {
+                k += '0';
+            }
+        }
+        
+        return k;
     };
     
-    GoldDice.UPPER_LIMIT = 1000000; //0xfffff - 1000000 = 48575
-    GoldDice.MAX_SEEK = 6; //Math.floor(b.length / 5)
-    
+    //- Class Functions
     GoldDice.prototype.roll = function(digits, rolls) {
         var result = [],
-            p, b, s, k, o, r;
+            p, b, s, k, r;
+        
+        if(typeof rolls === 'undefined') {
+            rolls = 1;
+        }
         
         for(var i = 0; i < rolls; i++) {
-            r = false;
-            o = 10;
             this.nonce += 1;
             
             p = Crypto.Hash.hmac(Crypto.Hash.sha256, new Buffer(this.nonce.toString(), 'utf8'), this.client);
             b = Crypto.Hash.hmac(Crypto.Hash.sha256, p, this.server);
             
             s = b.toString('hex').split('');
-            k = GoldDice.k(s, o);
             
-            for(var j = 0; j < GoldDice.MAX_SEEK; j++) {
-                if(k < GoldDice.UPPER_LIMIT) {
-                    r = GoldDice.kalc(k, digits);
-                    break;
-                } else {
-                    o += 5;
-                    k = GoldDice.k(s, o);
-                }
-            }
+            k = GoldDice.k(s);
+            r = GoldDice.splice(k, digits);
             
-            if(r === false) { //re roll
-                i--;
+            if(rolls === 1) {
+                result = r;
             } else {
                 result.push(r);
             }
-            
         }
         
         return result;
+    };
+    
+    GoldDice.prototype.toObject = function() {
+        return {
+            server: this.server,
+            client: this.client,
+            nonce: this.nonce
+        };
+    };
+    
+    GoldDice.prototype.toString = function() {
+        return JSON.stringify(this.toObject());
     };
     
     return GoldDice;

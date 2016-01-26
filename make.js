@@ -28,10 +28,6 @@ bitfactory.make({ //routes
         "gold-dice.min.js": ["header", function(cb) {
             fs.writeFileSync('gold-dice.min.js', header + UglifyJS.minify('gold-dice.js').code);
             cb();
-        }],
-        "cli.min.js": ["header", function(cb) {
-            fs.writeFileSync('cli.min.js', header + UglifyJS.minify('cli.js').code);
-            cb();
         }]
     }
 });
