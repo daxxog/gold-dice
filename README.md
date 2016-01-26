@@ -6,13 +6,22 @@
 
 Install
 -------
-stable
 ```bash
-npm install -g gold-dice
+npm install --save gold-dice
 ```
-edge
+
+Examples
+-------
 ```bash
-npm install -g https://github.com/daxxog/gold-dice/tarball/master
+var dice = new GoldDice();
+
+//two sides, one roll
+console.log(dice.roll(2));
+
+//six sides, ten rolls
+console.log(dice.roll(6, 10));
+
+console.log(dice.toString()); //the state of the dice, save this in a database or wherever
 ```
 
 [travis-image]: https://img.shields.io/travis/daxxog/gold-dice.png?branch=master
