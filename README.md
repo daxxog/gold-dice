@@ -21,7 +21,8 @@ console.log(dice.roll(2));
 //six sides, ten rolls
 console.log(dice.roll(6, 10));
 
-console.log(dice.toString()); //the state of the dice, save this in a database or wherever
+//the state of the dice, save this in a database or wherever
+console.log(dice.toString());
 ```
 
 [travis-image]: https://img.shields.io/travis/daxxog/gold-dice.png?branch=master
