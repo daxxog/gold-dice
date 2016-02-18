@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/daxxog/gold-dice",
   "main": "gold-dice.min.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "node": ">=4.2.4"
   },
@@ -31,9 +31,7 @@
     "prepublish": "npm run build"
   },
   "files": [
-    "cli.min.js",
     "gold-dice.min.js",
-    "bin/gold-dice"
   ],
   "dependencies": {
     "big.js": "^3.1.3",
