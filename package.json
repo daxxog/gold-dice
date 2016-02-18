@@ -31,7 +31,7 @@
     "prepublish": "npm run build"
   },
   "files": [
-    "gold-dice.min.js",
+    "gold-dice.min.js"
   ],
   "dependencies": {
     "big.js": "^3.1.3",
