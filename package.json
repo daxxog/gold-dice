@@ -22,7 +22,7 @@
   "devDependencies": {
     "bitfactory": "*",
     "stoptime": "*",
-    "uglify-js": "*",
+    "uglify-js": "2.6.0",
     "vows": "*"
   },
   "scripts": {
@@ -34,7 +34,6 @@
     "gold-dice.min.js"
   ],
   "dependencies": {
-    "big.js": "^3.1.3",
-    "bitcore-lib": "^0.13.11"
+    "big.js": "3.1.3"
   }
 }
